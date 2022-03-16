@@ -1,0 +1,2 @@
+# Wordel
+A Wordle replica
