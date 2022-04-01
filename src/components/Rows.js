@@ -26,23 +26,30 @@ function Rows() {
         document.getElementById(cName).style.borderColor = 'rgb(173, 173, 173)';
     }
 
-    const enterInn = () =>{ // if multiple letters maybe use hashmap containing count of letters in the word.
+    const enterInn = () =>{
         if(curr == limit+1){
             limit += 5;
         
             var point = 0;
             var guess = curr - 5;
+            var dupWord = wordPicked;
 
             function myLoop() {
                 setTimeout(function() {
                     var cName = 'anItem' + guess;
-                    if(document.getElementById(cName).innerHTML == wordPicked[point]){
+                    var testWord = document.getElementById(cName).innerHTML.toLowerCase();
+                    if(testWord == dupWord[point]){
                         document.getElementById(cName).style.transition = 'all 0.4s';
                         document.getElementById(cName).style.backgroundColor = 'rgb(106, 170, 100)';
                         document.getElementById(cName).style.color = 'white';
                         document.getElementById(cName).style.borderColor = 'rgb(106, 170, 100)';
+                        if(point < 5){
+                            dupWord = dupWord.substring(0,point) + '.' + dupWord.substring(point+1);
+                        }else{
+                            dupWord = dupWord.substring(0,point) + '.';
+                        }
                     }
-                    else if(wordPicked.includes(document.getElementById(cName).innerHTML)){
+                    else if(dupWord.includes(testWord)){
                         document.getElementById(cName).style.transition = 'all 0.4s';
                         document.getElementById(cName).style.backgroundColor = 'rgb(201, 180, 88)';
                         document.getElementById(cName).style.color = 'white';
