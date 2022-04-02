@@ -42,7 +42,7 @@ function TopNav() {
     const randomWorl = () => {
         var temp1 = randWord[Math.floor(Math.random()*data.length)];
         document.getElementById("randomWord").innerHTML = temp1;
-    }
+    }//  style={{cursor: 'pointer'}} onClick={randomWorl}
 
     return(
         <>
@@ -57,7 +57,7 @@ function TopNav() {
                     </div>
                 </div>
                 <div className={`${styles.title}`}>Wordel</div>
-                <div className={`${styles.topRight}`} style={{cursor: 'pointer'}} onClick={randomWorl}>Other</div>
+                <div className={`${styles.topRight}`}></div>
             </div>
 
             <div id='randomWord'>
