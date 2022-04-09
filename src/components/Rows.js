@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import data from './word-bank.json';
 import * as IoIcons from 'react-icons/io5';
+import { Congratulations } from './Congratulations.js';
 
 function Rows() {
 
     var curr = 1;
     var limit = 5;
+    var correct = 0;
     var wordPicked = data[Math.floor(Math.random()*data.length)];
     var myGuess = '';
     var backKey = '<path fill="none" stroke-linejoin="round" stroke-width="32" d="M135.19 390.14a28.79 28.79 0 0021.68 9.86h246.26A29 29 0 00432 371.13V140.87A29 29 0 00403.13 112H156.87a28.84 28.84 0 00-21.67 9.84v0L46.33 256l88.86 134.11z"></path><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M336.67 192.33L206.66 322.34m130.01 0L206.66 192.33m130.01 0L206.66 322.34m130.01 0L206.66 192.33"></path>';
@@ -35,6 +37,13 @@ function Rows() {
     const enterInn = () =>{
         if(!data.includes(myGuess)){
             console.log("Word not included in our dictionary");
+            document.getElementById('hintBox').style.opacity = '1';
+            document.getElementById('hintBox').style.visibility = 'visible';
+            setTimeout(function(){
+                document.getElementById('hintBox').style.transition = 'visibility 0s 1s, opacity 1s linear';
+                document.getElementById('hintBox').style.visibility = 'hidden';
+                document.getElementById('hintBox').style.opacity = '0';
+            }, 3000);
         }
         else if(curr === limit+1){
             limit += 5;
@@ -42,6 +51,7 @@ function Rows() {
             var point = 0;
             var guess = curr - 5;
             var dupWord = wordPicked;
+            correct = 0;
 
             function myLoop() {
                 setTimeout(function() {
@@ -57,6 +67,7 @@ function Rows() {
                         }else{
                             dupWord = dupWord.substring(0,point) + '.';
                         }
+                        correct+=1;
                     }
                     else if(dupWord.includes(testWord)){
                         document.getElementById(cName).style.transition = 'all 0.4s';
@@ -74,13 +85,19 @@ function Rows() {
                   guess++;
                   if (point < 5 && guess <= limit-5) {
                     myLoop(); 
+                  }else{
+                    myGuess = '';
+                  }
+
+                  if(correct === 5){
+                      setShowModal(prev => !prev);
                   }
                 }, 250)
             }
 
             myLoop();
-        
-            myGuess = '';
+
+            
         }
     }
 
@@ -97,7 +114,7 @@ function Rows() {
     }
 
     const newSample = () => {
-        console.log(myGuess);
+        console.log(wordPicked);
     }
 
     const keybaordPress = (event) => {
@@ -112,12 +129,18 @@ function Rows() {
         }
     }
 
+    const [showModal, setShowModal] = useState(false);
+
     useEffect(() => {
         document.addEventListener("keydown", sampleKeyPress);
-    });
+        return function cleanup() {
+            document.removeEventListener("keydown", sampleKeyPress);
+        }
+    }, []);
 
     return(
         <div>
+            <span className='hintBox' id='hintBox'>Word not in dictionary</span>
             <div className='bodyRows'>
                 <div className='grid-container' id='aGrid'>
                     <div id='anItem1'></div>
@@ -151,7 +174,7 @@ function Rows() {
                     <div id='anItem29'></div>
                     <div id='anItem30'></div>
                 </div>
-                <button onClick={(e) => newSample(e)}>Hit me</button>
+                <button onClick={(e) => newSample()}>Hit me</button>
             </div>
             <div className='kbRows'>
                 <div className="kb-container">
@@ -189,6 +212,8 @@ function Rows() {
                     <button onClick={(e) => keybaordPress(e)} className='bigger-btn' style={{fontSize: '20px'}}><IoIcons.IoBackspaceOutline/></button>
                 </div>
             </div>
+
+            <Congratulations showModal={showModal}/>
         </div>
     );
 }

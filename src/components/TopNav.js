@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 import React, { useState } from 'react';
 import { SideNav } from './SideNav.js';
 import { Tutorial } from './Tutorial.js';
-import data from './word-bank.json';
 
 function TopNav() {
 
@@ -36,13 +35,6 @@ function TopNav() {
     const openModal = () => {
         setShowModal(prev => !prev);
     };
-    
-    var randWord = data;
-
-    const randomWorl = () => {
-        var temp1 = randWord[Math.floor(Math.random()*data.length)];
-        document.getElementById("randomWord").innerHTML = temp1;
-    }//  style={{cursor: 'pointer'}} onClick={randomWorl}
 
     return(
         <>
@@ -52,7 +44,9 @@ function TopNav() {
                         <span className={`${styles.links}`}>About Me</span>
                     </Link>
                     <div>
-                        <div className={`${styles.topBtn}`}><FaIcons.FaInfoCircle style={{cursor: 'pointer'}} onClick={openModal}/></div>
+                        <div className={`${styles.topBtn}`}><FaIcons.FaInfoCircle style={{cursor: 'pointer'}} onClick={openModal}/>
+                            <span className={`${styles.links}`}>Tutorial</span>
+                        </div>
                         <Tutorial showModal={showModal} setShowModal={setShowModal} />
                     </div>
                 </div>
